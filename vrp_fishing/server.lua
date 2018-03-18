@@ -26,7 +26,13 @@ function tickPescador()
     if v then
       pescadores[k] = v+1
       if math.fmod(pescadores[k],10) == 0 then
-          vRP.giveInventoryItem(vRP.getUserId(k),peixes[math.random(1,#peixes)],1,true)
+        local user_id = vRP.getUserId(k)
+		local peixe = peixes[math.random(1,#peixes)]
+		if ((vRP.getInventoryWeight(user_id)+vRP.getItemWeight(peixe)) <= vRP.getInventoryMaxWeight(user_id)) then
+			vRP.giveInventoryItem(user_id,peixe,1,true)
+		else
+			 vRPclient.notify(vRP.getUserSource(user_id), "~r~Seu inventory esta cheio.")
+		end
       end
     end
   end
